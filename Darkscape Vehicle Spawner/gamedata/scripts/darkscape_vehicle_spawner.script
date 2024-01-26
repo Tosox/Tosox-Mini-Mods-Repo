@@ -1,0 +1,107 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Darkscape Vehicle Spawner
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Credits    : Grokitach
+	Date       : 02.10.2023
+	Last Edit  : 19.01.2024
+	=====================================================================
+--]]
+
+vehicle_spawn_table = {
+	veh0 = {
+		type = "veh_tr13",
+		location = vector():set(-541.1818, -1.7894, -454.6665),
+		level_id = 12964,
+		game_vertex_id = 1396
+	},
+	veh1 = {
+		type = "veh_zaz_968",
+		location = vector():set(-298.5625, -54998, -504.7299),
+		level_id = 94992,
+		game_vertex_id = 1127
+	},	
+	veh2 = {
+		type = "veh_niva",
+		location = vector():set(418.9117, 7.1031, -363.6832),
+		level_id = 900374,
+		game_vertex_id = 1190
+	},	
+	veh3 = {
+		type = "veh_uaz_01",
+		location = vector():set(413.6206, -0.2639, -353.2987),
+		level_id = 890855,
+		game_vertex_id = 1190
+	},
+	veh4 = {
+		type = "veh_uaz_02",
+		location = vector():set(384.9842, -0.7985, -449.0479),
+		level_id = 840565,
+		game_vertex_id = 1190
+	},
+	veh5 = {
+		type = "veh_niva",
+		location = vector():set(423.7749, -0.7194, 192.2425),
+		level_id = 909672,
+		game_vertex_id = 1190
+	},
+	veh6 = {
+		type = "veh_tr13",
+		location = vector():set(-363.2407, 2.7025, 574.1415),
+		level_id = 65611,
+		game_vertex_id = 1190
+	},	
+	veh7 = {
+		type = "veh_kamaz",
+		location = vector():set(-348.1494, 3.0001, 584.8413),
+		level_id = 72678,
+		game_vertex_id = 1190
+	},	
+	veh8 = {
+		type = "veh_zaz",
+		location = vector():set(-499.8231, 0.8414, -458.8291),
+		level_id = 23361,
+		game_vertex_id = 1190
+	},
+	veh9 = {
+		type = "veh_niva",
+		location = vector():set(291.0005, 1.5107, -195.3195),
+		level_id = 717159,
+		game_vertex_id = 1190
+	},
+	veh10 = {
+		type = "veh_zaz_968",
+		location = vector():set(-173.8721, 2.1128, -165.7107),
+		level_id = 189139,
+		game_vertex_id = 1190
+	}
+}
+
+local did_spawn_darkscape_vehicles = false
+
+function actor_on_first_update()
+	if did_spawn_darkscape_vehicles then
+		return
+	end
+
+	did_spawn_darkscape_vehicles = true
+	
+	for _, veh in pairs(vehicle_spawn_table) do
+		alife():create(veh.type, veh.location, veh.level_id, veh.game_vertex_id)
+	end
+end
+
+function save_state(m_data)
+	m_data.dvs_did_spawn_darkscape_vehicles = did_spawn_darkscape_vehicles
+end
+
+function load_state(m_data)
+	did_spawn_darkscape_vehicles = m_data.dvs_did_spawn_darkscape_vehicles
+end
+
+function on_game_start()
+	RegisterScriptCallback("save_state", save_state)
+	RegisterScriptCallback("load_state", load_state)
+	RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
+end

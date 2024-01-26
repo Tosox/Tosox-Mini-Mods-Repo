@@ -1,0 +1,49 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Quick Load loads Last Save
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 19.12.2023
+	Last Edit  : 19.01.2024
+	=====================================================================
+--]]
+
+orig_action_quick_load = level_input.action_quick_load
+level_input.action_quick_load = function(dik, bind)
+	-- You must check in your callback, and set flags.ret = true if an action took place
+	level_input.flags.ret = false
+	SendScriptCallback("on_before_load_input", dik, bind, level_input.flags)
+	if (level_input.flags.ret == true) then 
+		return true
+	end
+	
+	if not (device():is_paused()) then 
+		device():pause(true)
+	end
+	
+	local flist = getFS():file_list_open_ex("$game_saves$",	bit_or(FS.FS_ListFiles, FS.FS_RootOnly), "*" .. ui_load_dialog.saved_game_extension)
+	local f_cnt = flist and flist:Size() or 0
+	
+	if (f_cnt > 0) then
+		flist:Sort(FS.FS_sort_by_modif_down)
+		
+		-- Modified code
+		local file_name = flist:GetAt(0):NameFull():sub(0, -6):lower()
+		exec_console_cmd("load " .. file_name)
+		
+		--[[
+		-- Original code
+		for it=0, f_cnt-1 do
+			local file_name = flist:GetAt(it):NameFull():sub(0,-6):lower()
+			
+			-- grab last modified quicksave
+			if (string.match(file_name,".* %- quicksave_(%d+)")) then
+				exec_console_cmd("load " .. file_name)
+				return true
+			end
+		end
+		]]
+	end
+	
+	return true
+end

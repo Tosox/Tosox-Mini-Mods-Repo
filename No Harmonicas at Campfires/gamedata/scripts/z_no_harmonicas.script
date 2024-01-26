@@ -1,0 +1,28 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: No Harmonicas at Campfires
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 01.06.2023
+	Last Edit  : 19.01.2024
+	=====================================================================
+--]]
+
+orig_camp_manager_init = sr_camp.CCampManager.__init
+sr_camp.CCampManager.__init = function(...)
+	orig_camp_manager_init(...)
+	sr_camp.sr_camp_states.harmonica.precondition = function(...)
+		return false
+	end
+end
+
+-- This monkey patch is probably not even needed because the class is used nowhere
+orig_action_point_campfire_init = xr_campfire_point.action_point_campfire.__init
+xr_campfire_point.action_point_campfire.__init = function(self, ...)
+	orig_action_point_campfire_init(self, ...)
+	for i = #self.st.approved_actions, 1, -1 do
+		if self.st.approved_actions[i] == "play_harmonica" then
+			table.remove(self.st.approved_actions, i)
+		end
+	end
+end

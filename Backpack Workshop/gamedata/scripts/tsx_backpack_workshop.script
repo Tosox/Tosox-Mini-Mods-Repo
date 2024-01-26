@@ -1,0 +1,30 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Backpack Workshop
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 28.01.2023
+	Last Edit  : 19.01.2024
+	=====================================================================
+--]]
+
+function is_valid_backpack(obj, bag, mode)
+	return obj and IsItem("backpack", obj:section()) and string.match(mode, "inventory") and string.match(bag, "actor_equ")
+end
+
+function get_functor_string(obj, bag, mode)
+	return "st_backpack_workshop"
+end
+
+function open_workshop(obj, bag, mode)
+	hide_hud_inventory()
+	
+	local workshop_ui = ui_workshop.get_workshop_ui(_ui1, nil, nil, false)
+	if workshop_ui then
+		workshop_ui:ShowDialog(true)
+	end	
+end
+
+function on_game_start()
+	custom_functor_autoinject.add_functor("backpack_workshop", is_valid_backpack, get_functor_string, nil, open_workshop, true)
+end

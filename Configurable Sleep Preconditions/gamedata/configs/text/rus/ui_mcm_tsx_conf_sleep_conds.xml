@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_tsx_conf_sleep_conds">
+		<text>Configurable Sleep Preconditions</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_title">
+		<text>Configurable Sleep Preconditions</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_allow_bleeding">
+		<text>Разрешить спать при кровотечении</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_allow_radiation">
+		<text>Разрешить спать при облучении</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_allow_unsafe">
+		<text>Разрешить спать, когда не в безопасном месте</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_allow_awake">
+		<text>Разрешить спать, когда нет усталости (требуется Immersive Sleep)</text>
+	</string>
+	<string id="ui_mcm_tsx_conf_sleep_conds_immersive_sleep_patch">
+		<text>Совместимость для Immersive Sleep</text>
+	</string>
+</string_table>

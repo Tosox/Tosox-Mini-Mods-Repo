@@ -1,0 +1,92 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Auto-Equip Starter Gear
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 11.01.2024
+	Last Edit  : 19.01.2024
+	=====================================================================
+--]]
+
+function IsBinoc(o, c)
+	if not (c) then
+		c = o and o:clsid()
+	end
+	return c and (c == clsid.wpn_binocular_s or c == clsid.wpn_binocular)
+end
+
+function IsTorch(o, c)
+	if not (c) then
+		c = o and o:clsid()
+	end
+	return c and (c == clsid.device_torch_s or c == clsid.device_torch)
+end
+
+function IsPDA(o, c)
+	if not (c) then
+		c = o and o:clsid()
+	end
+	return c and (c == clsid.obj_pda_s or c == clsid.device_pda)
+end
+
+orig_new_game_equipment = itms_manager.new_game_equippment
+itms_manager.new_game_equippment = function(...)
+	orig_new_game_equipment(...)
+	
+	local binocs = {}
+	local backpacks = {}
+	local headgear = {}
+	local outfits = {}
+	local torches = {}
+	local pdas = {}
+	local detectors = {}
+
+	-- Gather gear
+	local function gather_gear(actor, itm)
+		local sec = itm:section()
+		if IsBinoc(itm) then
+			table.insert(binocs, itm)
+		elseif IsItem("backpack", sec) then
+			table.insert(backpacks, itm)
+		elseif IsHeadgear(itm) then
+			table.insert(headgear, itm)
+		elseif IsOutfit(itm) then
+			table.insert(outfits, itm)
+		elseif IsTorch(itm) then
+			table.insert(torches, itm)
+		elseif IsPDA(itm) then
+			table.insert(pdas, itm)
+		elseif IsItem("device", sec) then
+			table.insert(detectors, itm)
+		end
+	end
+	db.actor:iterate_inventory(gather_gear, db.actor)
+	
+	-- Equip gear
+	if #binocs > 0 then
+		db.actor:move_to_slot(binocs[1], 5)
+	end
+	if #backpacks > 0 then
+		db.actor:move_to_slot(backpacks[1], 13)
+	end
+	if #headgear > 0 then
+		db.actor:move_to_slot(headgear[1], 12)
+	end
+	if #outfits > 0 then
+		db.actor:move_to_slot(outfits[1], 7)
+	end
+	if #torches > 0 then
+		db.actor:move_to_slot(torches[1], 10)
+	end
+	if #pdas > 0 then
+		db.actor:move_to_slot(pdas[1], 8)
+	end
+	if #detectors > 0 then
+		db.actor:move_to_slot(detectors[1], 9)
+	end
+	
+	-- Override autosave again
+	exec_console_cmd("save " .. user_name() .. " - autosave")
+	
+	return true
+end
