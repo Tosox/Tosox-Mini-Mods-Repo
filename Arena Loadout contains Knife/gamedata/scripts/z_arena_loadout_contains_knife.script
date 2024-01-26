@@ -26,5 +26,7 @@ xr_effects.bar_arena_teleport = function(...)
         if not has_knife then
             alife_create_item(KNIFE, db.actor)
         end
+
+        return true
     end)
 end
