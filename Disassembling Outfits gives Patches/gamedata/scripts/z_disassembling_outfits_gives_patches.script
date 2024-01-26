@@ -8,16 +8,20 @@
 	=====================================================================
 --]]
 
+PATCH_CHANCE = 0.15
+
 patch_to_give = nil
 
 orig_item_parts_disassembly_outfit = item_parts.disassembly_outfit
 item_parts.disassembly_outfit = function(obj, obj_d)
-	local outfit_comm = ini_sys:r_string_ex(obj:section(), "community")
-	if (outfit_comm) and (outfit_comm ~= "") then
-		local patch_section = gameplay_disguise.get_patch(outfit_comm, true)
-		local is_unpatched = se_load_var(obj:id(), obj:name(), "unpatched")
-		if (not is_unpatched) and (patch_section) then
-			patch_to_give = patch_section
+	if math.random() < PATCH_CHANCE then
+		local outfit_comm = ini_sys:r_string_ex(obj:section(), "community")
+		if (outfit_comm) and (outfit_comm ~= "") then
+			local patch_section = gameplay_disguise.get_patch(outfit_comm, true)
+			local is_unpatched = se_load_var(obj:id(), obj:name(), "unpatched")
+			if (not is_unpatched) and (patch_section) then
+				patch_to_give = patch_section
+			end
 		end
 	end
 
