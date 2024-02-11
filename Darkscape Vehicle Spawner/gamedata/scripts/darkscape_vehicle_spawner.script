@@ -5,9 +5,11 @@
 	Author     : Tosox
 	Source     : https://github.com/Grokitach/Stalker_GAMMA/blob/main/G.A.M.M.A/modpack_addons/G.A.M.M.A.%20Vehicles%20in%20Darkscape/gamedata/scripts/grok_vehicles_spawner.script
 	Date       : 02.10.2023
-	Last Edit  : 27.01.2024
+	Last Edit  : 08.02.2024
 	=====================================================================
 --]]
+
+-- Do not spawn 'veh_zaz_968' since the mesh path for the destroyed object is invalid
 
 vehicle_spawn_table = {
 	veh0 = {
@@ -17,7 +19,7 @@ vehicle_spawn_table = {
 		game_vertex_id = 1396
 	},
 	veh1 = {
-		type = "veh_zaz_968",
+		type = "veh_zaz",
 		location = vector():set(-298.5625, -54998, -504.7299),
 		level_id = 94992,
 		game_vertex_id = 1127
@@ -71,7 +73,7 @@ vehicle_spawn_table = {
 		game_vertex_id = 1190
 	},
 	veh10 = {
-		type = "veh_zaz_968",
+		type = "veh_zaz",
 		location = vector():set(-173.8721, 2.1128, -165.7107),
 		level_id = 189139,
 		game_vertex_id = 1190
