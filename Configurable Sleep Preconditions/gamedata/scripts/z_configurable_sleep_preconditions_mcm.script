@@ -4,40 +4,12 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 10.01.2024
-	Last Edit  : 23.01.2024
+	Last Edit  : 11.02.2024
 	=====================================================================
 --]]
 
-local defaults = {
-	["allow_bleeding"] = false,
-	["allow_radiation"] = false,
-	["allow_unsafe"] = false,
-	["allow_awake"] = false,
-	["immersive_sleep_patch"] = false
-}
-
 -- G.A.M.M.A. value
 LAST_SLEEP_THRESHOLD = 5000
-
-function get_mcm_config(key)
-	if ui_mcm then return ui_mcm.get("tsx_conf_sleep_conds/" .. key) else return defaults[key] end
-end
-
-function on_mcm_load()
-	return {
-		id = "tsx_let_me_sleep", sh = true, gr = {
-			{ id = "title", type = "slide", link = "ui_options_slider_night", text = "ui_mcm_tsx_conf_sleep_conds_title", size = { 512, 50 }, spacing = 20 },
-			{ id = "allow_bleeding", type = "check", val = 1, def = defaults["allow_bleeding"] },
-			{ id = "allow_radiation", type = "check", val = 1, def = defaults["allow_radiation"] },
-			{ id = "allow_unsafe", type = "check", val = 1, def = defaults["allow_unsafe"] },
-			{ id = "allow_awake", type = "check", val = 1, def = defaults["allow_awake"] },
-			{ id = "separator", type = "line" },
-			{ id = "immersive_sleep_patch", type = "check", val = 1, def = defaults["immersive_sleep_patch"] }
-		}
-	}
-end
-
-
 
 local allow_bleeding = nil
 local allow_radiation = nil
@@ -92,6 +64,44 @@ ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
 	self:Initialize()
 	self:ShowDialog(true)
 	Register_UI("UISleep", "ui_sleep_dialog")
+end
+
+--===========================================================================
+--
+-- MCM
+--
+--===========================================================================
+
+local cc = table.concat
+
+local MCM_ROOT_ID = "tmmr"
+local MCM_MODULE_ID = "conf_sleep_conds"
+
+defaults = {
+	["allow_bleeding"] = false,
+	["allow_radiation"] = false,
+	["allow_unsafe"] = false,
+	["allow_awake"] = false,
+	["immersive_sleep_patch"] = false
+}
+
+function get_mcm_config(key)
+	local path = cc({ MCM_ROOT_ID, MCM_MODULE_ID, key }, "/")
+	if ui_mcm then return ui_mcm.get(path) else return defaults[key] end
+end
+
+function on_mcm_load()
+	return {
+		id = MCM_MODULE_ID, sh = true, gr = {
+			{ id = "title", type = "slide", link = "ui_options_slider_night", text = "ui_mcm_tmmr_conf_sleep_conds_title", size = { 512, 50 }, spacing = 20 },
+			{ id = "allow_bleeding", type = "check", val = 1, def = defaults["allow_bleeding"] },
+			{ id = "allow_radiation", type = "check", val = 1, def = defaults["allow_radiation"] },
+			{ id = "allow_unsafe", type = "check", val = 1, def = defaults["allow_unsafe"] },
+			{ id = "allow_awake", type = "check", val = 1, def = defaults["allow_awake"] },
+			{ id = "separator", type = "line" },
+			{ id = "immersive_sleep_patch", type = "check", val = 1, def = defaults["immersive_sleep_patch"] }
+		}
+	}, "tmmr"
 end
 
 function on_option_change()
