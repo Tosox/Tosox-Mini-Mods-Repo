@@ -101,7 +101,7 @@ function on_mcm_load()
 			{ id = "separator", type = "line" },
 			{ id = "immersive_sleep_patch", type = "check", val = 1, def = defaults["immersive_sleep_patch"] }
 		}
-	}, "tmmr"
+	}, MCM_ROOT_ID
 end
 
 function on_option_change()
