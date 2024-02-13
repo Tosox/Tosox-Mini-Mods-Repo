@@ -1,3 +1,13 @@
+v2024.02.13:
+* Added modular MCM options
+* "Adjacent Stash Rewards": Initial release
+* "Companion Wheel - Hold Fire Cycle": Initial release
+* "Dynamic BaS Label Remover": Initial release
+* "NPC Wounded Animations Fix": Added "Transfer weapon to inventory" MCM option
+* "Configurable Sleep Preconditions": Fixed MCM
+* "Disassembling Outfits gives Patches": Added "Patch Chance" MCM option
+* "Darkscape Vehicle Spawner": Removed ZAZ 968 vehicle from spawn list
+
 v2024.01.31:
 * "Vintar0's Companions don't blow Disguises - Enhanced": Initial Release
 * "TBs Angry Chimera Growls Fix": Initial Release
