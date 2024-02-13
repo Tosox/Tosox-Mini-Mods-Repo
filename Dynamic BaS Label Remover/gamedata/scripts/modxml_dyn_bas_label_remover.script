@@ -1,0 +1,40 @@
+FILES_TO_CHECK = {
+    ["text\\eng\\st_items_ammo_bas_eng.xml"] = true,
+    ["text\\eng\\st_items_weapons_addons_bas_eng.xml"] = true,
+    ["text\\eng\\st_items_weapons_bas_eng.xml"] = true,
+
+    ["text\\rus\\st_items_ammo_bas_rus.xml"] = true,
+    ["text\\rus\\st_items_weapons_addons_bas_rus.xml"] = true,
+    ["text\\rus\\st_items_weapons_bas_rus.xml"] = true,
+}
+
+-- This is regex btw
+BAS_LABELS_TO_REMOVE = {
+    [" %(BaS%)"] = true,
+    [" %(BaS%+Van%)"] = true,
+}
+
+function on_xml_read()
+    RegisterScriptCallback("on_xml_read", function(xml_file_name, xml_obj)
+        if not FILES_TO_CHECK[xml_file_name] then
+            return
+        end
+
+        local string_elems = xml_obj:query("string > text")
+        if is_empty(string_elems) then
+            return
+        end
+
+        for i = 1, #string_elems do
+            local text = xml_obj:getText(string_elems[i])
+            if text then
+                for label in pairs(BAS_LABELS_TO_REMOVE) do
+                    if string.find(text, label) then
+                        printf("Removing BaS label for '%s'", text)
+                        xml_obj:setText(string_elems[i], string.gsub(text, label, ""))
+                    end
+                end
+            end
+        end
+    end)
+end
