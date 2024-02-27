@@ -66,9 +66,14 @@ end
 -- Needs unlocalizer (_current_states)
 function get_next_combat_state()
         local current_states = parent._current_states
-        local next = (current_states.combat +1 > #combat_states)
+
+		if (hg_companion) then
+            local group = hg_companion.return_group()
+            current_states = current_states and current_states["squad_" .. group]
+        end
+        if not current_states then return end
+
+        return (current_states.combat +1 > #combat_states)
                 and combat_states[1]
                 or combat_states[current_states.combat +1]
-
-        return next
 end

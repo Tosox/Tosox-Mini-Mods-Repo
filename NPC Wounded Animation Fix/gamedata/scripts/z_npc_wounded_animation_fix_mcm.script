@@ -4,11 +4,9 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 11.01.2024
-	Last Edit  : 06.02.2024
+	Last Edit  : 27.02.2024
 	=====================================================================
 --]]
-
-local mcm_handle_weapon = nil
 
 orig_action_wounded_initialize = xr_wounded.action_wounded.initialize
 xr_wounded.action_wounded.initialize = function(self)
@@ -18,8 +16,8 @@ xr_wounded.action_wounded.initialize = function(self)
 	local item = npc:active_item()
 	local slot = npc:active_slot()
 	if (item) and ((slot == 2) or (slot == 3)) and (npc:dont_has_info("npcx_is_companion")) then
-		local transfer_to_inv = (mcm_handle_weapon == 0)
-		if (mcm_handle_weapon == 2) then
+		local transfer_to_inv = (get_mcm_config("handle_weapon") == 0)
+		if (get_mcm_config("handle_weapon") == 2) then
 			transfer_to_inv = (keep_guns_on_bodies ~= nil)
 		end
 
@@ -65,13 +63,4 @@ function on_mcm_load()
 			}
 		}
 	}, MCM_ROOT_ID
-end
-
-function on_option_change()
-	mcm_handle_weapon = get_mcm_config("handle_weapon")
-end
-
-function on_game_start()
-	RegisterScriptCallback("on_option_change", on_option_change)
-	on_option_change()
 end
