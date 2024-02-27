@@ -1,5 +1,4 @@
 v2024.02.27:
-* Refactored MCM code
 * "Adjustable Faction Patch Loot Chance": Initial release
 * "Companion Wheel - Hold Fire Cycle": HG Companion CTD fix
 
