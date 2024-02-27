@@ -4,24 +4,18 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 10.01.2024
-	Last Edit  : 11.02.2024
+	Last Edit  : 27.02.2024
 	=====================================================================
 --]]
 
 -- G.A.M.M.A. value
 LAST_SLEEP_THRESHOLD = 5000
 
-local allow_bleeding = nil
-local allow_radiation = nil
-local allow_unsafe = nil
-local allow_awake = nil
-local immersive_sleep_patch = nil
-
 orig_ui_sleep_test_and_show = ui_sleep_dialog.UISleep.TestAndShow
 ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
-	if immersive_sleep_patch then
+	if get_mcm_config("immersive_sleep_patch") then
 		local last_sleep = actor_status_sleep.get_last_sleep()
-		if (last_sleep < LAST_SLEEP_THRESHOLD) and (not allow_awake) then
+		if (last_sleep < LAST_SLEEP_THRESHOLD) and (not get_mcm_config("allow_awake")) then
 			actor_menu.set_msg(1, game.translate_string("st_sleep_awake"), 4)
 			disable_info("sleep_active")
 			return
@@ -33,12 +27,12 @@ ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
 		local radiation = db.actor.radiation > 0
 		
 		-- Prevent sleep if bleeding and/or iradiated.
-		if ((bleeding) and (not allow_bleeding)) or ((radiation) and (not allow_radiation)) then
-			if ((bleeding) and (not allow_bleeding)) and ((radiation) and (not allow_radiation)) then
+		if ((bleeding) and (not get_mcm_config("allow_bleeding"))) or ((radiation) and (not get_mcm_config("allow_radiation"))) then
+			if ((bleeding) and (not get_mcm_config("allow_bleeding"))) and ((radiation) and (not get_mcm_config("allow_radiation"))) then
 				actor_menu.set_msg(1, game.translate_string("st_sleep_bleeding_irradiated"), 5)
-			elseif (bleeding) and (not allow_bleeding) then
+			elseif (bleeding) and (not get_mcm_config("allow_bleeding")) then
 				actor_menu.set_msg(1, game.translate_string("st_sleep_bleeding"), 4)
-			elseif (radiation) and (not allow_radiation) then
+			elseif (radiation) and (not get_mcm_config("allow_radiation")) then
 				actor_menu.set_msg(1, game.translate_string("st_sleep_irradiated"), 4)
 			end
 			disable_info("sleep_active")
@@ -54,7 +48,7 @@ ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
 		end	
 		
 		-- If all is no, dont sleep
-		if (not actor_hide) and (not allow_unsafe) then
+		if (not actor_hide) and (not get_mcm_config("allow_unsafe")) then
 			actor_menu.set_msg(1, game.translate_string("st_cant_sleep_find_shelter_mlr"), 4)
 			disable_info("sleep_active")
 			return
@@ -93,7 +87,7 @@ end
 function on_mcm_load()
 	return {
 		id = MCM_MODULE_ID, sh = true, gr = {
-			{ id = "title", type = "slide", link = "ui_options_slider_night", text = "ui_mcm_tmmr_conf_sleep_conds_title", size = { 512, 50 }, spacing = 20 },
+			{ id = "title", type = "slide", link = "ui_options_slider_night", text = cc({ "ui_mcm", MCM_ROOT_ID, MCM_MODULE_ID, "title" }, "_"), size = { 512, 50 }, spacing = 20 },
 			{ id = "allow_bleeding", type = "check", val = 1, def = defaults["allow_bleeding"] },
 			{ id = "allow_radiation", type = "check", val = 1, def = defaults["allow_radiation"] },
 			{ id = "allow_unsafe", type = "check", val = 1, def = defaults["allow_unsafe"] },
@@ -102,17 +96,4 @@ function on_mcm_load()
 			{ id = "immersive_sleep_patch", type = "check", val = 1, def = defaults["immersive_sleep_patch"] }
 		}
 	}, MCM_ROOT_ID
-end
-
-function on_option_change()
-	allow_bleeding = get_mcm_config("allow_bleeding")
-	allow_radiation = get_mcm_config("allow_radiation")
-	allow_unsafe = get_mcm_config("allow_unsafe")
-	allow_awake = get_mcm_config("allow_awake")
-	immersive_sleep_patch = get_mcm_config("immersive_sleep_patch")
-end
-
-function on_game_start()
-	RegisterScriptCallback("on_option_change", on_option_change)
-	on_option_change()
 end

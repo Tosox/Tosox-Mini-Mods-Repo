@@ -4,17 +4,15 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 26.01.2024
-	Last Edit  : 12.02.2024
+	Last Edit  : 27.02.2024
 	=====================================================================
 --]]
-
-local mcm_patch_chance = nil
 
 local patch_to_give = nil
 
 orig_item_parts_disassembly_outfit = item_parts.disassembly_outfit
 item_parts.disassembly_outfit = function(obj, obj_d)
-	if math.random() < mcm_patch_chance then
+	if math.random() < get_mcm_config("patch_chance") then
 		local outfit_comm = ini_sys:r_string_ex(obj:section(), "community")
 		if (outfit_comm) and (outfit_comm ~= "") then
 			local patch_section = gameplay_disguise.get_patch(outfit_comm, true)
@@ -62,17 +60,8 @@ end
 function on_mcm_load()
 	return {
 		id = MCM_MODULE_ID, sh = true, gr = {
-			{ id = "title", type = "slide", link = "ui_options_slider_night", text = "ui_mcm_tmmr_outfits_gives_patches_title", size = { 512, 50 }, spacing = 20 },
+			{ id = "title", type = "slide", link = "ui_options_slider_night", text = cc({ "ui_mcm", MCM_ROOT_ID, MCM_MODULE_ID, "title" }, "_"), size = { 512, 50 }, spacing = 20 },
 			{ id = "patch_chance", type = "track", val = 2, min = 0.0, max = 1.0, step = 0.01, def = defaults["patch_chance"] }
 		}
 	}, MCM_ROOT_ID
-end
-
-function on_option_change()
-	mcm_patch_chance = get_mcm_config("patch_chance")
-end
-
-function on_game_start()
-	RegisterScriptCallback("on_option_change", on_option_change)
-	on_option_change()
 end
