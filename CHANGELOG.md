@@ -1,3 +1,6 @@
+v2024.02.29:
+* "Adjacent Stash Rewards": Fix stash spawn on new game
+
 v2024.02.27:
 * "Adjustable Faction Patch Loot Chance": Initial release
 * "Companion Wheel - Hold Fire Cycle": HG Companion CTD fix
