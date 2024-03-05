@@ -1,3 +1,6 @@
+v2024.03.05:
+* "TBs Angry Chimera Growls Fix": CTD fix
+
 v2024.02.29:
 * "Adjacent Stash Rewards": Fix stash spawn on new game
 
