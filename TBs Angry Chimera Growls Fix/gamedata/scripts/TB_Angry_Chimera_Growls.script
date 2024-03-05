@@ -34,52 +34,69 @@ function get_random_elem(t)
 end
 
 function get_growl_sound(mutant)
+	-- Default (chimera growl)
 	local growl_type = "growl"
+	
+	-- Lurker growl
 	if string.find(mutant:section(), "lurker") then
 		growl_type = "lurk"
 	end
+	
 	return sound_object("tb_growls\\tb_" .. growl_type .. "_" .. tostring(math.random(1, 8)))
 end
 
 function play_mutant_growls()
+	-- Skip if there are no mutants
 	if is_empty(tbl_mutants) then
 		return
 	end
 
+	-- Get a random mutant
 	local rand_mutant = get_random_elem(tbl_mutants)
+	
+	-- Little safety check because get_enemy still throws errors for some reason
+	if (not IsMonster(rand_mutant)) or (not rand_mutant:alive()) then
+		return
+	end
+	
+	-- Skip if mutant isn't aggroed
 	if not rand_mutant:get_enemy() then
 		return
 	end
 
+	-- Determine the growl sound
 	growl_sound = get_growl_sound(rand_mutant)
 	if not growl_sound then
 		return
 	end
 
+	-- Stop if sound is already playing
 	if growl_sound:playing() then
 		growl_sound:stop()
 	end
+	
+	-- Play growl sound
 	growl_sound:play_at_pos(rand_mutant, rand_mutant:position(), 0, sound_object.s3d)
 end
 
-function is_valid_mutant(obj_section)
-	return (obj_section) and ((string.find(obj_section, "chimera")) or (string.find(obj_section, "lurker"))) and true or false
+function is_valid_mutant(obj)
+	return (obj) and ((string.find(obj:section(), "chimera")) or (string.find(obj:section(), "lurker")))
 end
 
 function monster_on_net_spawn(obj, se_obj)
-	if is_valid_mutant(obj:section()) then
+	if is_valid_mutant(obj) then
 		tbl_mutants[obj:id()] = obj
 	end
 end
 
 function monster_on_net_destroy(obj)
-	if is_valid_mutant(obj:section()) then
+	if is_valid_mutant(obj) then
 		tbl_mutants[obj:id()] = nil
 	end
 end
 
 function monster_on_death_callback(obj, who)
-	if is_valid_mutant(obj:section()) then
+	if is_valid_mutant(obj) then
 		tbl_mutants[obj:id()] = nil
 	end
 end
