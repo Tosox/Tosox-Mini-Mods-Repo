@@ -5,7 +5,7 @@
 	Author     : Tosox
 	Credits    : Vintar0
 	Date       : 31.01.2024
-	Last Edit  : 31.01.2024
+	Last Edit  : 10.03.2024
 	=====================================================================
 --]]
 
@@ -17,7 +17,6 @@ gameplay_disguise.npc_on_update = function(npc)
 	end
 
     local id = npc:id()
-	local npc_squad = get_object_squad(npc)
     if (npc:see(db.actor)) and (npc:dont_has_info("npcx_is_companion")) then
         orig_gameplay_disguise_npc_on_update(npc)
     -- Copied from gameplay_disguise.script
