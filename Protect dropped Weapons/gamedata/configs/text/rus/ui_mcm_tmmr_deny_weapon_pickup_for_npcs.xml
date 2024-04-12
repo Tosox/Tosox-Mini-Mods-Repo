@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_tmmr">
+		<text>Tosox Mini Mods Repo</text>
+	</string>
+
+	<string id="ui_mcm_menu_protect_dropped_weapons">
+		<text>Protect dropped Weapons</text>
+	</string>
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_title">
+		<text>Protect dropped Weapons</text>
+	</string>
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_rule">
+		<text>Правило защиты</text>
+	</string>
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_rule_desc">
+		<text>Всегда - всегда защищать оружие от подбора \nКогда ударили - защищать оружие только в случае, если причиной его сброса был удар</text>
+	</string>	
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time">
+        <text>Время без возможности подбора оружия (секунды)</text>
+    </string>
+    <string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time_desc">
+        <text>Период времени в секундах, в течение которого НПС не могут подобрать оружие, которое вы бросили после того, как их ударили (задайте "0" для "навсегда")</text>
+    </string>
+
+	<string id="ui_mcm_lst_tmmr_always_protect">
+		<text>Всегда</text>
+	</string>
+	<string id="ui_mcm_lst_tmmr_protect_when_hit">
+		<text>Когда ударили</text>
+	</string>
+</string_table>
