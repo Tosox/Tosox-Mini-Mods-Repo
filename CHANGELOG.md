@@ -1,3 +1,9 @@
+v2024.04.12:
+* "Surge Crow Killer Fix": Initial release 
+* "Take Weapons from Prisoner Dialog Fix": Initial release
+* "NPCs cannot see though Foliage": Initial Release
+* "Protect dropped Weapons": Initial release
+
 v2024.03.05:
 * "TBs Angry Chimera Growls Fix": CTD fix
 
