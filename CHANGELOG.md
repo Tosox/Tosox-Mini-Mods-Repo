@@ -1,3 +1,6 @@
+v2024.04.22:
+* "Surge Crow Killer Fix": CTD fix
+
 v2024.04.12:
 * "Surge Crow Killer Fix": Initial release 
 * "Take Weapons from Prisoner Dialog Fix": Initial release
