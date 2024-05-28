@@ -4,7 +4,7 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 11.01.2024
-	Last Edit  : 26.01.2024
+	Last Edit  : 21.05.2024
 	=====================================================================
 --]]
 
@@ -105,7 +105,7 @@ function restore_equipped_slots()
 	end
 	equipped_slots = {}
 
-	-- Wait until we equipped out outfit
+	-- Wait until we equipped our outfit
 	CreateTimeEvent("tsx_auto_equip_gear", "equip_belt", 0.25, function()
 		-- Restore all items from the belt
 		for _, v in pairs(equipped_belt) do
@@ -124,8 +124,12 @@ itms_manager.new_game_equippment = function(...)
 	
 	equip_gear()
 	
-	-- Override autosave again
-	exec_console_cmd("save " .. user_name() .. " - autosave")
+	-- Wait until we equipped our outfit
+	CreateTimeEvent("tsx_auto_equip_gear", "equip_gear", 0.25, function()
+		-- Override autosave again
+		exec_console_cmd("save " .. user_name() .. " - autosave")
+		return true
+	end)
 	
 	return true
 end
