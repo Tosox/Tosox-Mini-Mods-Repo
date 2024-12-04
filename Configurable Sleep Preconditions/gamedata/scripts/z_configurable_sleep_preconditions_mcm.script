@@ -4,16 +4,18 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 10.01.2024
-	Last Edit  : 27.02.2024
+	Last Edit  : 02.12.2024
 	=====================================================================
 --]]
 
 -- G.A.M.M.A. value
 LAST_SLEEP_THRESHOLD = 5000
 
-orig_ui_sleep_test_and_show = ui_sleep_dialog.UISleep.TestAndShow
+do_patch_hours = false
+
+ui_sleep_dialog_UISleep_TestAndShow = ui_sleep_dialog.UISleep.TestAndShow
 ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
-	if get_mcm_config("immersive_sleep_patch") then
+	if ui_sleep_dialog.get_immersive_sleep_hours then
 		local last_sleep = actor_status_sleep.get_last_sleep()
 		if (last_sleep < LAST_SLEEP_THRESHOLD) and (not get_mcm_config("allow_awake")) then
 			actor_menu.set_msg(1, game.translate_string("st_sleep_awake"), 4)
@@ -54,10 +56,43 @@ ui_sleep_dialog.UISleep.TestAndShow = function(self, force)
 			return
 		end
 	end
+
+	do_patch_hours = true
 	
 	self:Initialize()
 	self:ShowDialog(true)
 	Register_UI("UISleep", "ui_sleep_dialog")
+end
+
+ui_sleep_dialog_UISleep_Close = ui_sleep_dialog.UISleep.TestAndShow
+ui_sleep_dialog.UISleep.TestAndShow = function(self)
+	do_patch_hours = false
+	ui_sleep_dialog_UISleep_Close(self)
+end
+
+ui_sleep_dialog_get_immersive_sleep_hours = nil
+if ui_sleep_dialog.get_immersive_sleep_hours then
+	ui_sleep_dialog_get_immersive_sleep_hours = ui_sleep_dialog.get_immersive_sleep_hours
+	ui_sleep_dialog.get_immersive_sleep_hours = function(hours)
+		if do_patch_hours then
+			do_patch_hours = false
+			return hours
+		end
+		return ui_sleep_dialog_get_immersive_sleep_hours(hours)
+	end
+end
+
+-- G.A.M.M.A. patch
+if ui_sleep_dialog.get_immersive_sleep_hours then
+	ui_sleep_dialog_UISleep_OnButtonSleep = ui_sleep_dialog.UISleep.OnButtonSleep
+	ui_sleep_dialog.UISleep.OnButtonSleep = function(self)
+		local orig_fun = actor_status_sleep.get_last_sleep
+		actor_status_sleep.get_last_sleep = function() return LAST_SLEEP_THRESHOLD end
+
+		ui_sleep_dialog_UISleep_OnButtonSleep(self)
+
+		actor_status_sleep.get_last_sleep = orig_fun
+	end
 end
 
 --===========================================================================
@@ -75,8 +110,7 @@ defaults = {
 	["allow_bleeding"] = false,
 	["allow_radiation"] = false,
 	["allow_unsafe"] = false,
-	["allow_awake"] = false,
-	["immersive_sleep_patch"] = false
+	["allow_awake"] = false
 }
 
 function get_mcm_config(key)
@@ -91,9 +125,7 @@ function on_mcm_load()
 			{ id = "allow_bleeding", type = "check", val = 1, def = defaults["allow_bleeding"] },
 			{ id = "allow_radiation", type = "check", val = 1, def = defaults["allow_radiation"] },
 			{ id = "allow_unsafe", type = "check", val = 1, def = defaults["allow_unsafe"] },
-			{ id = "allow_awake", type = "check", val = 1, def = defaults["allow_awake"] },
-			{ id = "separator", type = "line" },
-			{ id = "immersive_sleep_patch", type = "check", val = 1, def = defaults["immersive_sleep_patch"] }
+			{ id = "allow_awake", type = "check", val = 1, def = defaults["allow_awake"] }
 		}
 	}, MCM_ROOT_ID
 end
