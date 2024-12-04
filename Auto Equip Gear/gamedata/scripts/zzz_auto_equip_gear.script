@@ -4,7 +4,7 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 11.01.2024
-	Last Edit  : 21.05.2024
+	Last Edit  : 02.12.2024
 	=====================================================================
 --]]
 
@@ -31,15 +31,29 @@ end
 
 --=====================================================================
 
-do_anims = false
-function disable_item_animations()
-	do_anims = actor_effects.is_animations_on()
-	actor_effects.set_animations(false)
+-- Flag to pause animations
+pause_animations = false
+
+-- General function to patch methods
+function patch_function(target_table, function_name)
+    if target_table and target_table[function_name] then
+        local original_function = target_table[function_name]
+        target_table[function_name] = function(...)
+            if pause_animations then
+                return
+            end
+            return original_function(...)
+        end
+    end
 end
 
-function restore_item_animations()
-	actor_effects.set_animations(do_anims)
-end
+-- Patch specific functions
+patch_function(actor_effects, "play_item_fx")
+patch_function(outfit_animations, "on_item_to_slot")
+patch_function(outfit_animations, "on_item_to_ruck")
+patch_function(headgear_animations, "on_item_to_slot")
+patch_function(headgear_animations, "on_item_to_ruck")
+patch_function(headgear_animations, "on_item_drop")
 
 --=====================================================================
 
@@ -87,12 +101,15 @@ equipped_belt = {}
 function save_equipped_slots()
 	-- Save all items in the slots
 	for i = 1, 13 do
-		equipped_slots[i] = db.actor:item_in_slot(i)
+		local itm = db.actor:item_in_slot(i)
+		if itm then
+			equipped_slots[i] = itm:id()
+		end
 	end
 
 	-- Save all items in the belt
 	db.actor:iterate_belt(function(actor, itm)
-		table.insert(equipped_belt, itm)
+		table.insert(equipped_belt, itm:id())
 	end)
 end
 
@@ -100,7 +117,10 @@ function restore_equipped_slots()
 	-- Restore all items from the slots
 	for i = 1, 13 do
 		if equipped_slots[i] then
-			db.actor:move_to_slot(equipped_slots[i], i)
+			local itm = level.object_by_id(equipped_slots[i])
+			if itm then
+				db.actor:move_to_slot(itm, i)
+			end
 		end
 	end
 	equipped_slots = {}
@@ -109,7 +129,10 @@ function restore_equipped_slots()
 	CreateTimeEvent("tsx_auto_equip_gear", "equip_belt", 0.25, function()
 		-- Restore all items from the belt
 		for _, v in pairs(equipped_belt) do
-			db.actor:move_to_belt(v)
+			local itm = level.object_by_id(v)
+			if itm then
+				db.actor:move_to_belt(itm)
+			end
 		end
 		equipped_belt = {}
 		return true
@@ -121,6 +144,9 @@ end
 orig_new_game_equipment = itms_manager.new_game_equippment
 itms_manager.new_game_equippment = function(...)
 	orig_new_game_equipment(...)
+
+	-- Disable item animations
+	pause_animations = true
 	
 	equip_gear()
 	
@@ -128,6 +154,9 @@ itms_manager.new_game_equippment = function(...)
 	CreateTimeEvent("tsx_auto_equip_gear", "equip_gear", 0.25, function()
 		-- Override autosave again
 		exec_console_cmd("save " .. user_name() .. " - autosave")
+
+		-- Restore item animations
+		pause_animations = false
 		return true
 	end)
 	
@@ -140,7 +169,7 @@ xr_effects.bar_arena_teleport = function(...)
 	save_equipped_slots()
 
 	-- Disable item animations
-	disable_item_animations()
+	pause_animations = true
 
     orig_xr_effects_bar_arena_teleport(...)
 
@@ -154,6 +183,18 @@ end
 orig_xr_effects_bar_arena_teleport_2 = xr_effects.bar_arena_teleport_2
 xr_effects.bar_arena_teleport_2 = function(...)
 	orig_xr_effects_bar_arena_teleport_2(...)
+	
+	-- MBo - Arena rebalance patch
+	if mbo_arena_monkeypatch then
+		-- give actor back his items that were taken
+		local box = get_story_object("bar_arena_inventory_box")
+		if (box) then
+			local function transfer_object_item(box, item)
+				box:transfer_item(item, db.actor)
+			end
+			box:iterate_inventory_box(transfer_object_item, box)
+		end
+	end
 
 	-- Wait until we received our items back
 	CreateTimeEvent("tsx_auto_equip_gear", "equip_arena_exit", 0.25, function()
@@ -165,10 +206,34 @@ xr_effects.bar_arena_teleport_2 = function(...)
 			restore_equipped_slots()
 
 			-- Restore item animations
-			restore_item_animations()
+			pause_animations = false
 			
 			return true
 		end)
 		return true
 	end)
+end
+
+function save_state(m_data)
+	m_data.tsx_auto_equip_gear = {
+		["pause_animations"] = pause_animations,
+		["equipped_slots"] = equipped_slots,
+		["equipped_belt"] = equipped_belt
+	}
+end
+
+function load_state(m_data)
+	if m_data.tsx_auto_equip_gear then
+		pause_animations = m_data.tsx_auto_equip_gear.pause_animations
+
+		equipped_slots = m_data.tsx_auto_equip_gear.equipped_slots
+		equipped_belt = m_data.tsx_auto_equip_gear.equipped_belt
+
+		m_data.tsx_auto_equip_gear = nil
+	end
+end
+
+function on_game_start()
+	RegisterScriptCallback("save_state", save_state)
+	RegisterScriptCallback("load_state", load_state)
 end

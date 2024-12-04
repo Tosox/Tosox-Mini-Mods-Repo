@@ -22,7 +22,4 @@
 	<string id="ui_mcm_tmmr_conf_sleep_conds_allow_awake">
 		<text>Allow sleeping when not tired (requires Immersive Sleep)</text>
 	</string>
-	<string id="ui_mcm_tmmr_conf_sleep_conds_immersive_sleep_patch">
-		<text>Immersive Sleep compatibility</text>
-	</string>
 </string_table>

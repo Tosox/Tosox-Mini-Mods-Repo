@@ -1,3 +1,8 @@
+v2024.12.04:
+* "Auto Equip Gear": various bugs and CTD fixes
+* "Configurable Sleep Preconditions": Immersive sleep patch fix
+* "ShoC Poltergeists": Initial Release
+
 v2024.04.22:
 * "Surge Crow Killer Fix": CTD fix
 
