@@ -1,0 +1,11 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Mutant Corpses don't Decay
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 02.01.2025
+	Last Edit  : 02.01.2025
+	=====================================================================
+--]]
+
+ui_mutant_loot.MutantLootDecayTime = math.huge
