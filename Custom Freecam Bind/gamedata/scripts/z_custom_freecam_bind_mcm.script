@@ -1,0 +1,85 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Custom Freecam Bind
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 02.01.2025
+	Last Edit  : 30.03.2025
+	=====================================================================
+--]]
+
+-- Please don't break :(
+function get_key_as_string(value)
+	local localized = ui_mcm.dispaly_key(value)
+	if localized == "<!!!>" then
+		return nil
+	end
+
+	local mouse_key = string.match(localized, "^MOUSE(%d+)")
+	if mouse_key then
+		return "MOUSE_" .. mouse_key
+	end
+
+	return "DIK_" .. localized
+end
+
+-- From xrs_debug_tools
+DEBUG_DEMO_FUNC = function(p)
+	if not DEV_DEBUG then 
+		return 
+	end
+	
+	if p == 1 then
+		exec_console_cmd("demo_record t")
+	end
+end
+
+function on_option_change()
+	-- Get custom keybind
+	local custom_key = get_key_as_string(get_mcm_config("hotkey"))
+	if custom_key == nil then
+		printf("![Custom Freecam Bind] Error: Invalid keybind")
+		return
+	end
+
+	-- Override default keybind
+	axr_keybind.bind(custom_key, DEBUG_DEMO_FUNC, "debug_demo_record")
+
+	-- Save keybind to config
+	axr_main.config:w_value("global_keybinds", "debug_demo_record", custom_key)
+	axr_main.config:save()
+end
+
+function on_game_start()
+	RegisterScriptCallback("on_option_change", on_option_change)
+	on_option_change()
+end
+
+--===========================================================================
+--
+-- MCM
+--
+--===========================================================================
+
+local cc = table.concat
+
+local MCM_ROOT_ID = "tmmr"
+local MCM_MODULE_ID = "custom_freecam_bind"
+
+defaults = {
+	["hotkey"] = DIK_keys.DIK_NUMPAD0
+}
+
+function get_mcm_config(key)
+	local path = cc({ MCM_ROOT_ID, MCM_MODULE_ID, key }, "/")
+	if ui_mcm then return ui_mcm.get(path) else return defaults[key] end
+end
+
+function on_mcm_load()
+	return {
+		id = MCM_MODULE_ID, sh = true, gr = {
+			{ id = "title", type = "slide", link = "ui_options_slider_player", text = cc({ "ui_mcm", MCM_ROOT_ID, MCM_MODULE_ID, "title" }, "_"), size = { 512, 50 }, spacing = 20 },
+			{ id = "hotkey", type = "key_bind", val = 2, def = defaults["hotkey"] }
+		}
+	}, MCM_ROOT_ID
+end
