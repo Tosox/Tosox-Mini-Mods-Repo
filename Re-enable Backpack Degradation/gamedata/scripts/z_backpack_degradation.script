@@ -1,0 +1,29 @@
+-- Note: Edit file with Windows-1251 encoding!
+
+ui_pda_encyclopedia_tab_UpdateDescr = ui_pda_encyclopedia_tab.UpdateDescr
+ui_pda_encyclopedia_tab.UpdateDescr = function(section, str)
+    str = ui_pda_encyclopedia_tab_UpdateDescr(section, str)
+
+    if section == "encyclopedia__notes__state" then
+        db.actor:iterate_inventory(function(actor, obj)
+            if obj then
+				if IsItem("backpack", nil, obj) then
+                    local condition = obj:condition()
+					local display_condition = tostring(math.ceil(condition * 100))
+					
+					local clr
+					if (condition < 0.25) then clr = utils_xml.get_color("red")
+					elseif (condition < 0.5) then clr = utils_xml.get_color("orange")
+					elseif (condition < 0.75) then clr = utils_xml.get_color("yellow")
+					else clr = utils_xml.get_color("green")
+					end
+					
+					local name = ui_item.get_sec_name(obj:section())
+					str = str .. "\\n%c[0,170,170,170]• " .. name .. ": " .. clr .. display_condition .. "%"
+				end
+			end
+        end, db.actor)
+    end
+
+    return str
+end
