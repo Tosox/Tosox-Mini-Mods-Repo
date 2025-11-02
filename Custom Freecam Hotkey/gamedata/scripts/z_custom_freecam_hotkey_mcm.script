@@ -1,26 +1,26 @@
 --[[
 	=====================================================================
-	Addon      : Tosox Mini Mods Repo: Custom Freecam Bind
+	Addon      : Tosox Mini Mods Repo: Custom Freecam Hotkey
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 02.01.2025
-	Last Edit  : 30.03.2025
+	Last Edit  : 02.11.2025
 	=====================================================================
 --]]
 
 -- Please don't break :(
-function get_key_as_string(value)
-	local localized = ui_mcm.dispaly_key(value)
-	if localized == "<!!!>" then
+function get_dik_key_name(value)
+	local keyname = dik_to_keyname(value, false)
+	if not keyname then
 		return nil
 	end
 
-	local mouse_key = string.match(localized, "^MOUSE(%d+)")
+	local mouse_key = string.match(keyname, "^mouse(%d+)")
 	if mouse_key then
 		return "MOUSE_" .. mouse_key
 	end
 
-	return "DIK_" .. localized
+	return "DIK_" .. string.sub(keyname, 2)
 end
 
 -- From xrs_debug_tools
@@ -36,9 +36,20 @@ end
 
 function on_option_change()
 	-- Get custom keybind
-	local custom_key = get_key_as_string(get_mcm_config("hotkey"))
+	local dik_key = get_mcm_config("key")
+	if dik_key == -1 then
+		-- Try unbind key if set to UNBOUND
+		local current_key = axr_main.config:r_value("global_keybinds", "debug_demo_record", 0)
+		if current_key then
+			axr_keybind.unbind(current_key, DEBUG_DEMO_FUNC)
+			axr_main.config:w_value("global_keybinds", "debug_demo_record", nil)
+			axr_main.config:save()
+		end
+	end
+
+	local custom_key = get_dik_key_name(dik_key)
 	if custom_key == nil then
-		printf("![Custom Freecam Bind] Error: Invalid keybind")
+		printf("![Custom Freecam Hotkey] Error: Unknown key")
 		return
 	end
 
@@ -64,10 +75,10 @@ end
 local cc = table.concat
 
 local MCM_ROOT_ID = "tmmr"
-local MCM_MODULE_ID = "custom_freecam_bind"
+local MCM_MODULE_ID = "custom_freecam_hotkey"
 
 defaults = {
-	["hotkey"] = DIK_keys.DIK_NUMPAD0
+	["key"] = DIK_keys.DIK_NUMPAD0
 }
 
 function get_mcm_config(key)
@@ -79,7 +90,7 @@ function on_mcm_load()
 	return {
 		id = MCM_MODULE_ID, sh = true, gr = {
 			{ id = "title", type = "slide", link = "ui_options_slider_player", text = cc({ "ui_mcm", MCM_ROOT_ID, MCM_MODULE_ID, "title" }, "_"), size = { 512, 50 }, spacing = 20 },
-			{ id = "hotkey", type = "key_bind", val = 2, def = defaults["hotkey"] }
+			{ id = "key", type = "key_bind", val = 2, def = defaults["key"] }
 		}
 	}, MCM_ROOT_ID
 end
