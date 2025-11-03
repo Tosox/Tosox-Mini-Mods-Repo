@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_targetID_zoom_flag_option">
+		<text>Additional zoom check</text>
+	</string>
+	<string id="ui_mcm_targetID_zoom_flag_option_desc">
+		<text>Adds an extra condition that only shows faction information when aiming down sights or through a scope.</text>
+	</string>
+	
+	<string id="ui_mcm_lst_targetID_zoom_off">
+		<text>Off</text>
+	</string>
+	<string id="ui_mcm_lst_targetID_zoom_aimed">
+		<text>Aiming down sights</text>
+	</string>
+	<string id="ui_mcm_lst_targetID_zoom_scoped">
+		<text>Aiming with a scope</text>
+	</string>
+</string_table>
