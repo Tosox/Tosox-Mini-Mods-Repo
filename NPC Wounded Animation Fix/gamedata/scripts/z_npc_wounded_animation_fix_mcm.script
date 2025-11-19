@@ -19,6 +19,7 @@ xr_wounded.action_wounded.initialize = function(self)
 		local handle_weapon_opt = get_mcm_config("handle_weapon")
 		local transfer_to_inv =
 			npc:has_info("npcx_is_companion")
+			or (character_community(npc) == "zombied")
 			or (handle_weapon_opt == 0)
 			or (handle_weapon_opt == 2 and keep_guns_on_bodies ~= nil)
 
