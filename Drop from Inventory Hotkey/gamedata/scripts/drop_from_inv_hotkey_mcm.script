@@ -4,7 +4,7 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 04.07.2025
-	Last Edit  : 02.11.2025
+	Last Edit  : 19.11.2025
 	=====================================================================
 --]]
 
@@ -14,7 +14,7 @@ ui_inventory_UIInventory_On_CC_Hover = ui_inventory.UIInventory.On_CC_Hover
 ui_inventory.UIInventory.On_CC_Hover = function(self, bag, idx)
     ui_inventory_UIInventory_On_CC_Hover(self, bag, idx)
 
-    if is_hotkey_pressed then
+    if self.mode == "inventory" and is_hotkey_pressed then
         local obj = self.CC[bag]:GetObj(idx)
 	    if obj then
 		    self:Action_Drop(obj, bag)
