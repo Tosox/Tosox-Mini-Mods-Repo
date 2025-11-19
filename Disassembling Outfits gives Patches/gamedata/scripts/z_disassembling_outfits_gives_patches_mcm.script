@@ -61,7 +61,7 @@ local MCM_ROOT_ID = "tmmr"
 local MCM_MODULE_ID = "outfits_gives_patches"
 
 defaults = {
-	["patch_chance"] = 0.15
+	["patch_chance"] = 1.0
 }
 
 function get_mcm_config(key)
