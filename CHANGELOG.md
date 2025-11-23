@@ -1,5 +1,17 @@
+v2025.11.:
+* "Utjan's Item UI Improvements - Armor Info Enhanced": Remove module
+* "Re-enable Backpack Degradation": Initial release
+* "Custom Freecam Hotkey": Initial release
+* "Drop from Inventory Hotkey": Initial release
+* "Mutant Corpses don't Decay": Initial release
+* "NPC Wounded Animation Fix": Fix for companions and zombified stalkers
+* "Disassembling Outfits gives Patches": Fix disassembly condition mismatch
+* "Talk to Everyone": Improved compatability
+* "Mysteries of the Zone Unlocker": Improved compatability
+* "ShoC Poltergeists": Improved compatability
+
 v2024.12.04:
-* "Auto Equip Gear": various bugs and CTD fixes
+* "Auto Equip Gear": Various bugs and CTD fixes
 * "Configurable Sleep Preconditions": Immersive sleep patch fix
 * "ShoC Poltergeists": Initial Release
 
