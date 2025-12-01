@@ -1,4 +1,4 @@
-v2025.11.:
+v2025.12.01:
 * "Utjan's Item UI Improvements - Armor Info Enhanced": Remove module
 * "Re-enable Backpack Degradation": Initial release
 * "Custom Freecam Hotkey": Initial release
@@ -9,6 +9,7 @@ v2025.11.:
 * "Talk to Everyone": Improved compatability
 * "Mysteries of the Zone Unlocker": Improved compatability
 * "ShoC Poltergeists": Improved compatability
+* "Protect dropped Weapons": Improved compatability
 
 v2024.12.04:
 * "Auto Equip Gear": Various bugs and CTD fixes
