@@ -4,7 +4,7 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 02.01.2025
-	Last Edit  : 02.01.2025
+	Last Edit  : 01.12.2025
 	=====================================================================
 --]]
 
@@ -12,17 +12,14 @@ ui_options_init_opt_base = ui_options.init_opt_base
 ui_options.init_opt_base = function()
 	ui_options_init_opt_base()
 
-	if (ui_options.options[4].id ~= "gameplay") then
-		printf("!Re-enable Backpack Degradation: gameplay path is invalid")
+	local economy_diff = follow_path(ui_options.options, { "gameplay", "economy_diff" })
+	if not economy_diff then
 		return
 	end
 
-	if (ui_options.options[4].gr[3].id ~= "economy_diff") then
-		printf("!Re-enable Backpack Degradation: economy_diff path is invalid")
-		return
-	end
+	economy_diff.gr = economy_diff.gr or {}
 
-	table.insert(ui_options.options[4].gr[3].gr, {
+	table.insert(economy_diff.gr, {
 		id = "bkpk_degradation",
 		type = "check",
 		val = 1,
@@ -32,3 +29,34 @@ ui_options.init_opt_base = function()
 end
 
 ui_options.init_opt_base()
+
+function find_child(list, id)
+    if not list then
+		return nil
+	end
+
+    for _, item in ipairs(list) do
+        if item.id == id then
+            return item
+        end
+    end
+
+    return nil
+end
+
+
+function follow_path(root_list, ids)
+	local current = nil
+	local list = root_list
+
+    for _, id in ipairs(ids) do
+        current = find_child(list, id)
+        if not current then
+            printf("!Re-enable Backpack Degradation: '%s' path is invalid", id)
+            return nil
+        end
+        list = current.gr
+    end
+
+    return current
+end
