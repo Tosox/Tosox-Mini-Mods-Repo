@@ -6,6 +6,7 @@ v2025.12.01:
 * "Mutant Corpses don't Decay": Initial release
 * "NPC Wounded Animation Fix": Fix for companions and zombified stalkers
 * "Disassembling Outfits gives Patches": Fix disassembly condition mismatch
+* "500 Weight Slider": Improved compatability
 * "Talk to Everyone": Improved compatability
 * "Mysteries of the Zone Unlocker": Improved compatability
 * "ShoC Poltergeists": Improved compatability
