@@ -6,16 +6,16 @@ v2025.12.01:
 * "Mutant Corpses don't Decay": Initial release
 * "NPC Wounded Animation Fix": Fix for companions and zombified stalkers
 * "Disassembling Outfits gives Patches": Fix disassembly condition mismatch
-* "500 Weight Slider": Improved compatability
-* "Talk to Everyone": Improved compatability
-* "Mysteries of the Zone Unlocker": Improved compatability
-* "ShoC Poltergeists": Improved compatability
-* "Protect dropped Weapons": Improved compatability
+* "500 Weight Slider": Improved compatibilty
+* "Talk to Everyone": Improved compatibilty
+* "Mysteries of the Zone Unlocker": Improved compatibilty
+* "ShoC Poltergeists": Improved compatibilty
+* "Protect dropped Weapons": Improved compatibilty
 
 v2024.12.04:
 * "Auto Equip Gear": Various bugs and CTD fixes
 * "Configurable Sleep Preconditions": Immersive sleep patch fix
-* "ShoC Poltergeists": Initial Release
+* "ShoC Poltergeists": Initial release
 
 v2024.04.22:
 * "Surge Crow Killer Fix": CTD fix
@@ -23,7 +23,7 @@ v2024.04.22:
 v2024.04.12:
 * "Surge Crow Killer Fix": Initial release 
 * "Take Weapons from Prisoner Dialog Fix": Initial release
-* "NPCs cannot see though Foliage": Initial Release
+* "NPCs cannot see though Foliage": Initial release
 * "Protect dropped Weapons": Initial release
 * "Utjan's Item UI Improvements - Armor Info Enhanced": Initial release
 
@@ -48,12 +48,12 @@ v2024.02.13:
 * "Darkscape Vehicle Spawner": Removed ZAZ 968 vehicle from spawn list
 
 v2024.01.31:
-* "Vintar0's Companions don't blow Disguises - Enhanced": Initial Release
-* "TBs Angry Chimera Growls Fix": Initial Release
-* "Great_Day's No Weapon Drop from Damage": Initial Release
-* "Vintar0's Talk to Everyone": Initial Release
-* "Vintar0's Higher Wound Percent": Initial Release
-* "Dynamic News Heard Melee Fix": Improved Compatibility
+* "Vintar0's Companions don't blow Disguises - Enhanced": Initial release
+* "TBs Angry Chimera Growls Fix": Initial release
+* "Great_Day's No Weapon Drop from Damage": Initial release
+* "Vintar0's Talk to Everyone": Initial release
+* "Vintar0's Higher Wound Percent": Initial release
+* "Dynamic News Heard Melee Fix": Improved compatibility
 
 v2024.01.27:
 * "Task Marker for Delivery Tasks Fix": CTD fix for Skinflint Delivery + fail task if package vanishes
@@ -61,12 +61,12 @@ v2024.01.27:
 * "NPC Wounded Animation Fix": Companions now don't drop their weapon
 
 v2024.01.26:
-* "Arena Loadout contains Knife": Initial Release
-* "Disassembling Outfits gives Patches": Initial Release
+* "Arena Loadout contains Knife": Initial release
+* "Disassembling Outfits gives Patches": Initial release
 * "Auto-Equip Starter Gear": Renamed to "Auto Equip Gear"
 * "Auto Equip Gear": Now also equips gear when entering end exiting the arena
 * "NPC Wounded Animation Fix": Adjustments to the dropped weapon condition
 * "Task Marker for Delivery Tasks Fix": Now works for more delivery task types
 
 v2024.01.25:
-* Initial Release
+* Initial release
