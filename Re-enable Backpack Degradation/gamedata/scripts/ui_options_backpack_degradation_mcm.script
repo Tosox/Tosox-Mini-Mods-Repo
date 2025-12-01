@@ -8,28 +8,6 @@
 	=====================================================================
 --]]
 
-ui_options_init_opt_base = ui_options.init_opt_base
-ui_options.init_opt_base = function()
-	ui_options_init_opt_base()
-
-	local economy_diff = follow_path(ui_options.options, { "gameplay", "economy_diff" })
-	if not economy_diff then
-		return
-	end
-
-	economy_diff.gr = economy_diff.gr or {}
-
-	table.insert(economy_diff.gr, {
-		id = "bkpk_degradation",
-		type = "check",
-		val = 1,
-		curr = { ui_options.curr_economy, "bkpk_degradation" },
-		functor = { ui_options.func_economy_diff, "bkpk_degradation" },
-	})
-end
-
-ui_options.init_opt_base()
-
 function find_child(list, id)
     if not list then
 		return nil
@@ -60,3 +38,25 @@ function follow_path(root_list, ids)
 
     return current
 end
+
+ui_options_init_opt_base = ui_options.init_opt_base
+ui_options.init_opt_base = function()
+	ui_options_init_opt_base()
+
+	local economy_diff = follow_path(ui_options.options, { "gameplay", "economy_diff" })
+	if not economy_diff then
+		return
+	end
+
+	economy_diff.gr = economy_diff.gr or {}
+
+	table.insert(economy_diff.gr, {
+		id = "bkpk_degradation",
+		type = "check",
+		val = 1,
+		curr = { ui_options.curr_economy, "bkpk_degradation" },
+		functor = { ui_options.func_economy_diff, "bkpk_degradation" },
+	})
+end
+
+ui_options.init_opt_base()
