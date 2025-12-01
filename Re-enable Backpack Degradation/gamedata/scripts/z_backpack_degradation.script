@@ -1,3 +1,13 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Re-enable Backpack Degradation
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 30.03.2025
+	Last Edit  : 01.12.2025
+	=====================================================================
+--]]
+
 -- Note: Edit file with Windows-1251 encoding!
 
 ui_pda_encyclopedia_tab_UpdateDescr = ui_pda_encyclopedia_tab.UpdateDescr
