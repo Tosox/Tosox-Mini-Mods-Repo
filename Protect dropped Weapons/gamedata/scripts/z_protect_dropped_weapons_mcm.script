@@ -4,92 +4,72 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 09.03.2024
-	Last Edit  : 09.04.2024
+	Last Edit  : 24.11.2025
 	=====================================================================
 --]]
 
 xrs_facer_action_facer_execute = xrs_facer.action_facer.execute
 xrs_facer.action_facer.execute = function(self)
+    if get_mcm_config("protection_rule") ~= 1 then
+        xrs_facer_action_facer_execute(self)
+        return
+    end
+
+    local actor_drop_item = db.actor.drop_item
+	db.actor.drop_item = function(_self, item)
+        actor_drop_item(_self, item)
+        protect_weapon(item:id())
+    end
+
     xrs_facer_action_facer_execute(self)
 
-    if get_mcm_config("protection_rule") ~= 1 then
-        return
-    end
-
-    local target_id = load_var(self.object, "facer_target", nil)
-	local target = target_id and db.storage[target_id] and db.storage[target_id].object
-    if (not target) or (not self.end_time) then
-		return
-	end
-
-    if self.hit_time ~= self.end_time then
-        return
-    end
-
-    if target_id ~= AC_ID then
-        return
-    end
-
-    local spos = utils_obj.safe_bone_pos(self.object, "bip01_neck")
-    local tpos = utils_obj.safe_bone_pos(target, "bip01_neck")
-    local ysub = spos.y - tpos.y
-
-    if (ysub > 1.5) or (ysub <= -1.8) then
-        return
-    end
-
-    if (spos:distance_to_xz(tpos) >= 3) or (self.object:animation_count() == 0) then
-        return
-    end
-
-    -- Actor probably got punched and dropped his weapon
-
-    local active_item = db.actor:active_item()
-    if not active_item then
-        return
-    end
-
-    temp_protect_weapon(active_item:id())
+    db.actor.drop_item = actor_drop_item
 end
 
-function temp_protect_weapon(wep_id)
+function protect_weapon(wep_id)
     se_save_var(wep_id, nil, "protected_from_npc_pickup", true)
 
-    if get_mcm_config("no_pickup_time") == 0 then
-        return
+    if get_mcm_config("protection_time") ~= 0 then
+        CreateTimeEvent("protect_dropped_weapons", "remove_pickup_flag" .. wep_id, get_mcm_config("protection_time"), function(id)
+            se_save_var(id, nil, "protected_from_npc_pickup", nil)
+            return true
+        end, wep_id)
     end
-
-    CreateTimeEvent("protect_dropped_weapons", "remove_pickup_flag" .. wep_id, get_mcm_config("no_pickup_time"), function(id)
-        se_save_var(id, nil, "protected_from_npc_pickup", nil)
-        return true
-    end, wep_id)
 end
 
 function actor_on_item_drop(item)
-    if get_mcm_config("protection_rule") ~= 0 then
-        return
-    end
-
     local item_id = IsWeapon(item) and item:id()
     if item_id then
-        temp_protect_weapon(item_id)
+        protect_weapon(item_id)
     end
 end
 
 function npc_on_item_before_pickup(npc, item, flags)
-    if (not npc) or (not item) then
-        return
-    end
-
-    if se_load_var(item:id(), nil, "protected_from_npc_pickup") then
-        -- printf("Denying item %s for npc %s", item:section(), npc:name())
+    if item and se_load_var(item:id(), nil, "protected_from_npc_pickup") then
         flags.ret_value = false
+    end
+end
+
+function actor_on_item_take(item)
+    local item_id = item and item:id()
+    if item_id and se_load_var(item_id, nil, "protected_from_npc_pickup") then
+        se_save_var(item_id, nil, "protected_from_npc_pickup", nil)
+    end
+end
+
+function on_option_change()
+    if get_mcm_config("protection_rule") == 0 then
+        RegisterScriptCallback("actor_on_item_drop", actor_on_item_drop)
+    else
+        UnregisterScriptCallback("actor_on_item_drop", actor_on_item_drop)
     end
 end
 
 function on_game_start()
     RegisterScriptCallback("npc_on_item_before_pickup", npc_on_item_before_pickup)
-    RegisterScriptCallback("actor_on_item_drop", actor_on_item_drop)
+    RegisterScriptCallback("actor_on_item_take", actor_on_item_take)
+    RegisterScriptCallback("on_option_change", on_option_change)
+    on_option_change()
 end
 
 --===========================================================================
@@ -105,7 +85,7 @@ local MCM_MODULE_ID = "protect_dropped_weapons"
 
 defaults = {
     ["protection_rule"] = 1,
-	["no_pickup_time"] = 10
+	["protection_time"] = 10
 }
 
 function get_mcm_config(key)
@@ -123,7 +103,7 @@ function on_mcm_load()
 					{ 1, "tmmr_protect_when_hit" }
 				}
 			},
-			{ id = "no_pickup_time", type = "track", val = 2, min = 0.0, max = 120.0, step = 0.5, def = defaults["no_pickup_time"] }
+			{ id = "protection_time", type = "track", val = 2, min = 0.0, max = 120.0, step = 0.5, def = defaults["protection_time"] }
 		}
 	}, MCM_ROOT_ID
 end

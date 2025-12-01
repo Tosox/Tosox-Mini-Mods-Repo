@@ -1,14 +1,12 @@
 --[[
 	=====================================================================
-	Addon      : Tosox Mini Mods Repo: 500 Weight Slider
+	Addon      : Tosox Mini Mods Repo: Re-enable Backpack Degradation
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
-	Date       : 28.11.2023
+	Date       : 02.01.2025
 	Last Edit  : 01.12.2025
 	=====================================================================
 --]]
-
-NEW_WEIGHT = 500
 
 function find_child(list, id)
     if not list then
@@ -32,7 +30,7 @@ function follow_path(root_list, ids)
     for _, id in ipairs(ids) do
         current = find_child(list, id)
         if not current then
-            printf("!500 Weight Slider: '%s' path is invalid", id)
+            printf("!Re-enable Backpack Degradation: '%s' path is invalid", id)
             return nil
         end
         list = current.gr
@@ -45,12 +43,20 @@ ui_options_init_opt_base = ui_options.init_opt_base
 ui_options.init_opt_base = function()
 	ui_options_init_opt_base()
 
-	local weight = follow_path(ui_options.options, { "gameplay", "gameplay_diff", "weight" })
-	if not weight then
+	local economy_diff = follow_path(ui_options.options, { "gameplay", "economy_diff" })
+	if not economy_diff then
 		return
 	end
 
-	weight.max = NEW_WEIGHT
+	economy_diff.gr = economy_diff.gr or {}
+
+	table.insert(economy_diff.gr, {
+		id = "bkpk_degradation",
+		type = "check",
+		val = 1,
+		curr = { ui_options.curr_economy, "bkpk_degradation" },
+		functor = { ui_options.func_economy_diff, "bkpk_degradation" },
+	})
 end
 
 ui_options.init_opt_base()

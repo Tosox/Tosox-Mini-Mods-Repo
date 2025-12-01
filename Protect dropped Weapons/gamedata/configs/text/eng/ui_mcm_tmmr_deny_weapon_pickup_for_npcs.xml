@@ -16,10 +16,10 @@
 	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_rule_desc">
 		<text>Always - Always protect the weapon from getting picked up \nWhen punched - Only protect the weapon when the reason for dropping the gun was getting punched</text>
 	</string>
-	<string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time">
-		<text>No weapon pickup time (seconds)</text>
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_time">
+		<text>Protection time (seconds)</text>
 	</string>
-	<string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time_desc">
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_time_desc">
 		<text>Period of time in seconds during which NPCs cannot pick up the weapon you dropped after getting punched (set it to "0" for "forever")</text>
 	</string>
 

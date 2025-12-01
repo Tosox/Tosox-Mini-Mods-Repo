@@ -1,0 +1,96 @@
+--[[
+	=====================================================================
+	Addon      : Tosox Mini Mods Repo: Drop from Inventory Hotkey
+	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
+	Author     : Tosox
+	Date       : 04.07.2025
+	Last Edit  : 24.11.2025
+	=====================================================================
+--]]
+
+local is_hotkey_pressed = false
+
+ui_inventory_UIInventory_On_CC_Hover = ui_inventory.UIInventory.On_CC_Hover
+ui_inventory.UIInventory.On_CC_Hover = function(self, bag, idx)
+    ui_inventory_UIInventory_On_CC_Hover(self, bag, idx)
+
+    if self.mode == "inventory" and bag == "actor_bag" and is_hotkey_pressed then
+        local obj = self.CC[bag]:GetObj(idx)
+	    if not obj then
+		    return
+	    end
+
+		if self:Cond_Childs(obj, bag) then
+			self:Action_Drop_All(obj, bag)
+		else
+			self:Action_Drop(obj, bag)
+		end
+        is_hotkey_pressed = false
+    end
+end
+
+function on_key_press(key)
+    if key == get_mcm_config("key") then
+		is_hotkey_pressed = true
+	end
+end
+
+function on_key_hold(key)
+    if key == get_mcm_config("key") then
+		is_hotkey_pressed = true
+	end
+end
+
+function on_key_release(key)
+    if key == get_mcm_config("key") then
+		is_hotkey_pressed = false
+	end
+end
+
+function on_game_start()
+    RegisterScriptCallback("on_key_press", on_key_press)
+	RegisterScriptCallback("on_key_hold", on_key_hold)
+    RegisterScriptCallback("on_key_release", on_key_release)
+end
+
+if ish_fast_transfer then
+	ish_fast_transfer_Ishy_On_Hover = ish_fast_transfer.Ishy_On_Hover
+	ish_fast_transfer.Ishy_On_Hover = function(self, idx)
+		local inv = ui_inventory.GUI
+		if inv and inv.mode == "inventory" then
+			ish_fast_transfer.Base_On_Hover(self, idx)
+			return
+		end
+
+		ish_fast_transfer_Ishy_On_Hover(self, idx)
+	end
+end
+
+--===========================================================================
+--
+-- MCM
+--
+--===========================================================================
+
+local cc = table.concat
+
+local MCM_ROOT_ID = "tmmr"
+local MCM_MODULE_ID = "drop_from_inv_hotkey"
+
+defaults = {
+	["key"] = DIK_keys.DIK_LSHIFT
+}
+
+function get_mcm_config(key)
+	local path = cc({ MCM_ROOT_ID, MCM_MODULE_ID, key }, "/")
+	if ui_mcm then return ui_mcm.get(path) else return defaults[key] end
+end
+
+function on_mcm_load()
+	return {
+		id = MCM_MODULE_ID, sh = true, gr = {
+			{ id = "title", type = "slide", link = "ui_options_slider_player", text = cc({ "ui_mcm", MCM_ROOT_ID, MCM_MODULE_ID, "title" }, "_"), size = { 512, 50 }, spacing = 20 },
+			{ id = "key", type = "key_bind", val = 2, def = defaults["key"] }
+		}
+	}, MCM_ROOT_ID
+end

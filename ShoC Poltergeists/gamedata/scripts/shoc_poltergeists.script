@@ -4,14 +4,19 @@
 	Link       : https://www.moddb.com/mods/stalker-anomaly/addons/tosox-mini-mods-repo/
 	Author     : Tosox
 	Date       : 02.12.2024
-	Last Edit  : 02.12.2024
+	Last Edit  : 19.11.2025
 	=====================================================================
 --]]
 
 bind_monster_generic_object_binder_death_callback = bind_monster.generic_object_binder.death_callback
 bind_monster.generic_object_binder.death_callback = function(self, victim, who)
     local safe_release_manager_release = safe_release_manager.release
-    safe_release_manager.release = function(se_obj) end
+    safe_release_manager.release = function(se_obj)
+		if se_obj and se_obj:clsid() == clsid.poltergeist_s then
+			return
+		end
+		safe_release_manager_release(se_obj)
+	end
 
     bind_monster_generic_object_binder_death_callback(self, victim, who)
 

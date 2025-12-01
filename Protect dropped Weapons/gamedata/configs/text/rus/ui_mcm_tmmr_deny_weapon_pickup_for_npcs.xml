@@ -16,10 +16,10 @@
 	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_rule_desc">
 		<text>Всегда - всегда защищать оружие от подбора \nКогда ударили - защищать оружие только в случае, если причиной его сброса был удар</text>
 	</string>	
-	<string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time">
-        <text>Время без возможности подбора оружия (секунды)</text>
+	<string id="ui_mcm_tmmr_protect_dropped_weapons_protection_time">
+        <text>Время защиты (секунды)</text>
     </string>
-    <string id="ui_mcm_tmmr_protect_dropped_weapons_no_pickup_time_desc">
+    <string id="ui_mcm_tmmr_protect_dropped_weapons_protection_time_desc">
         <text>Период времени в секундах, в течение которого НПС не могут подобрать оружие, которое вы бросили после того, как их ударили (задайте "0" для "навсегда")</text>
     </string>
 
