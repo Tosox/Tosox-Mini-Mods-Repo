@@ -10,20 +10,6 @@
 
 NEW_WEIGHT = 500
 
-ui_options_init_opt_base = ui_options.init_opt_base
-ui_options.init_opt_base = function()
-	ui_options_init_opt_base()
-
-	local weight = follow_path(ui_options.options, { "gameplay", "gameplay_diff", "weight" })
-	if not weight then
-		return
-	end
-
-	weight.max = NEW_WEIGHT
-end
-
-ui_options.init_opt_base()
-
 function find_child(list, id)
     if not list then
 		return nil
@@ -54,3 +40,17 @@ function follow_path(root_list, ids)
 
     return current
 end
+
+ui_options_init_opt_base = ui_options.init_opt_base
+ui_options.init_opt_base = function()
+	ui_options_init_opt_base()
+
+	local weight = follow_path(ui_options.options, { "gameplay", "gameplay_diff", "weight" })
+	if not weight then
+		return
+	end
+
+	weight.max = NEW_WEIGHT
+end
+
+ui_options.init_opt_base()
